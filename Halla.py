@@ -59,7 +59,7 @@ def ship(x,y):
 #00 er øverst i venstre hjørne
 
 def text_objects(text, font):
-	TextSurface = font.render(text, True, black)
+	TextSurface = font.render(text, True, white)
 	return TextSurface, TextSurface.get_rect()
 
 def message_display(text):
