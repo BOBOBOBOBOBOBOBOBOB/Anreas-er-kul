@@ -1,7 +1,7 @@
 import pygame
 import time
 import random
-#Windows: søk CMD: Skriv 'D:': Skriv 'cd Andreas\Koding': så kjør programmet ved å skrive 'Halla.py'
+#Windows: søk CMD: Skriv 'D:': Skriv 'cd Andreas\Kode dingse boms': så kjør programmet ved å skrive 'Halla.py'
 
 
 pygame.init()
@@ -15,14 +15,29 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 
+
+
+bg_width = 9992
+bg_height = 600
+
 ship_width = 52
 ship_height = 52
+
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Space Escape')
 clock = pygame.time.Clock()
 
 shipImg = pygame.image.load('Spaceship.png')
+
+bg = pygame.image.load('Background1.png')
+
+
+
+def background(xa, ya):
+	gameDisplay.blit(bg, (xa,ya))
+
+
 
 def live_score(count):
 	font = pygame.font.SysFont(None, 25)
@@ -64,7 +79,11 @@ def destroy():
 
 def game_loop():
 
- 
+	xa = 0
+	ya = 0
+
+
+
 	x = (display_width * 0.1)
 	y = (display_height * 0.45)
 
@@ -73,7 +92,7 @@ def game_loop():
 
 	obstacle_startx = 850
 	obstacle_starty = random.randrange(0, display_width)
-	obstacle_speed = random.randrange(3, 13)
+	obstacle_speed = 4
 	obstacle_width = 100
 	obstacle_height = 100
 	score = 0
@@ -99,14 +118,12 @@ def game_loop():
 					y_change = 0
 
 
-
 		y += y_change
 
-		gameDisplay.fill(white)
-
-
+		background(xa, ya)
+		xa -= 1
 		#obstacles(ox, oy, ow, oh, color):
-		obstacles(obstacle_startx, obstacle_starty, obstacle_width, obstacle_height, black)
+		obstacles(obstacle_startx, obstacle_starty, obstacle_width, obstacle_height, white)
 		obstacle_startx -= obstacle_speed
 
 		live_score(score)
@@ -119,14 +136,35 @@ def game_loop():
 		if obstacle_startx < 0 - obstacle_width:
 			obstacle_startx = display_width + obstacle_width
 			obstacle_starty = random.randrange(0, display_height - obstacle_height)
+			
+			tall = random.randrange(0,1200)
+
+			if tall < 200:
+				obstacle_speed = 4
+			elif tall >= 300 and tall < 400:
+				obstacle_speed = 5
+			elif tall >= 400 and tall < 500:
+				obstacle_speed = 6
+			elif tall >= 500 and tall < 600:
+				obstacle_speed = 7
+			elif tall >= 600 and tall < 700:
+				obstacle_speed = 8
+			elif tall >= 700 and tall < 800:
+				obstacle_speed = 9
+			elif tall >= 800 and tall < 900:
+				obstacle_speed = 10
+			elif tall >= 1000 and tall < 1100:
+				obstacle_speed = 11
+			elif tall >= 1100 and tall < 1200:
+				obstacle_speed = 12
 			score += 1
 
+		
 
 
 
 
-
-		if x + ship_width >= obstacle_startx and y + ship_height > obstacle_starty and y < obstacle_starty + obstacle_height:
+		if x + ship_width >= obstacle_startx and y + ship_height > obstacle_starty and y < obstacle_starty + obstacle_height and x < obstacle_startx + obstacle_width:
 			destroy()
 
 
@@ -143,5 +181,5 @@ def game_loop():
 game_loop()
 quitgame()
 
-# This copyright material by An2Ba prouductions. It belongs fully and only by An2Ba and them alone. Copying and/or duplicate "Space Escape" violates this policy.
+# This is copyright material by An2Ba prouductions. It belongs fully and only by An2Ba and them alone. Copying and/or duplicateing "Space Escape" violates this policy.
 
