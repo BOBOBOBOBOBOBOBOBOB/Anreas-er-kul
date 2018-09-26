@@ -192,3 +192,36 @@ quitgame()
 
 # This is copyright material by An2Ba prouductions. It belongs fully and only by An2Ba and them alone. Copying and/or duplicateing "Space Escape" violates this policy.
 
+
+
+
+
+
+
+#class level:
+#
+#	def __init__(self, level_number, level_speed, level_zoom, level_track):
+#		self.level_number = level_number
+#		self.level_speed = level_speed
+#		self.level_zoom = level_zoom
+#		self.level_track = level_track
+#
+#level1_speed = level(1, 3, 0, 1)
+#level2 = 0
+#level3 = 0
+#level4 = 0
+
+
+
+
+#print(level1.level_number)
+
+
+
+
+
+
+
+
+
+
