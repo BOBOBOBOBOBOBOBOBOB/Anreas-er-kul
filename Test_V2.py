@@ -3,6 +3,7 @@ import time
 import random
 #Windows: søk CMD: Skriv 'D:': Skriv 'cd Andreas\Kode dingse boms': så kjør programmet ved å skrive 'Halla.py'
 
+textbox = pygame.image.load("Textbox.png")
 
 pygame.init()
 
@@ -34,6 +35,9 @@ ship_height = 52
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Space Escape')
 clock = pygame.time.Clock()
+
+button = pygame.Rect((display_width * 0.4), (display_height * 0.5), 120, 65)
+
 
 
 asteroid1 = pygame.image.load('Asteroid1.png')
@@ -82,8 +86,18 @@ def message_display(text):
 
 def destroy():
 	message_display('Your ship was Destroyed!')
-	time.sleep(2)
-	game_loop()
+	time.sleep(5)
+
+def restart():
+	while True:
+		pygame.draw.rect(gameDisplay, red, button)
+		clock.tick(30)
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				quitgame()
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				if event.button == 1 and button.collidepoint(event.pos[0],event.pos[1]):
+					game_loop()
 
 
 
@@ -98,6 +112,10 @@ def game_loop():
 
 	x = (display_width * 0.1)
 	y = (display_height * 0.45)
+
+
+	tx = 100
+	ty = 30
 
 	x_change = 0
 	y_change = 0
@@ -133,7 +151,7 @@ def game_loop():
 		y += y_change
 
 		background(xa, ya)
-		xa -= 1
+		xa -= 6
 
 		angle += angle_add
 		if angle >= 360:
@@ -191,6 +209,7 @@ def game_loop():
 
 		if x + ship_width >= obstacle_startx and y + ship_height > obstacle_starty and y < obstacle_starty + obstacle_height and x < obstacle_startx + obstacle_width:
 			destroy()
+			restart()
 		
 
 
