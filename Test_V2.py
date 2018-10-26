@@ -1,15 +1,14 @@
 import pygame
 import time
 import random
+from button import *
 #Windows: søk CMD: Skriv 'D:': Skriv 'cd Andreas\Kode dingse boms': så kjør programmet ved å skrive 'Halla.py'
 
 textbox = pygame.image.load("Textbox.png")
 
 pygame.init()
 
-pygame.mixer.music.load("Menu.wav")
-pygame.mixer.music.play(loops=-1, start=0.0)
-pygame.mixer.music.set_volume(0.5)
+
 
 display_width = 800
 display_height = 600
@@ -22,12 +21,15 @@ blue = (0, 0, 255)
 
 bg = pygame.image.load('Background1.png')
 bg1 = pygame.image.load('Background2.png')
+menu_background = pygame.image.load("Space 1.png")
 bg_width = 9992
 bg_height = 600
 bg1_width = 9992
 bg1_height = 600
 
 shipImg = pygame.image.load('Spaceship.png')
+shipImg2 = pygame.image.load('S1.png')
+shipImg3 = pygame.image.load('S2.png')
 ship_width = 52
 ship_height = 52
 
@@ -36,8 +38,11 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Space Escape')
 clock = pygame.time.Clock()
 
-button = pygame.Rect((display_width * 0.4), (display_height * 0.5), 120, 65)
+ragequit = pygame.image.load('ragequit.png')
 
+
+#button = pygame.Rect((display_width * 0.4), (display_height * 0.5), 120, 65)
+button = button(335,450,w=150,h=50,color=red)
 
 
 asteroid1 = pygame.image.load('Asteroid1.png')
@@ -48,6 +53,9 @@ current_asteroid = random.choice(asteroids)
 current_asteroid1 = random.choice(asteroids)
 
 number = random.randrange(0, 1000)
+
+smx = 335
+smy = 470
 
 def background(xa, ya):
 	gameDisplay.blit(bg, (xa,ya))
@@ -84,20 +92,36 @@ def message_display(text):
 
 	pygame.display.update()
 
-def destroy():
-	message_display('Your ship was Destroyed!')
-	time.sleep(5)
 
-def restart():
+
+
+def destroy():
+	pygame.mixer.music.stop()
+	message_display('Your ship was Destroyed!')	
+	gameDisplay.blit(ragequit,(335, 470))
+	time.sleep(0.15)
+	gameDisplay.blit(ragequit,(335, 470))
+
+	time.sleep(2)
+	menu_screen()
+
+def menu_screen():
+	pygame.mixer.init()
+	pygame.mixer.music.load("menu_music.wav")
+	pygame.mixer.music.play(loops=-1, start=0.0)
+	pygame.mixer.music.set_volume(0.5)
 	while True:
-		pygame.draw.rect(gameDisplay, red, button)
-		clock.tick(30)
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				quitgame()
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				if event.button == 1 and button.collidepoint(event.pos[0],event.pos[1]):
 					game_loop()
+
+		gameDisplay.blit(menu_background,(0,0))
+		pygame.draw.rect(gameDisplay,button.color,button.rect)
+		pygame.display.update()
+		clock.tick(30)
 
 
 
@@ -131,6 +155,9 @@ def game_loop():
 
 	gameExit = False
 
+	pygame.mixer.music.load("game_music.wav")
+	pygame.mixer.music.play(loops=-1, start=0.0)
+	pygame.mixer.music.set_volume(0.5)
  
 	while not gameExit:
 
@@ -151,7 +178,7 @@ def game_loop():
 		y += y_change
 
 		background(xa, ya)
-		xa -= 6
+		xa -= 1
 
 		angle += angle_add
 		if angle >= 360:
@@ -204,7 +231,8 @@ def game_loop():
 				obstacle_speed = 12
 			score += 1
 
-
+			if obstacle_speed == 4:
+				angle_add = random.randrange(-1, 1)
 
 
 		if x + ship_width >= obstacle_startx and y + ship_height > obstacle_starty and y < obstacle_starty + obstacle_height and x < obstacle_startx + obstacle_width:
@@ -219,8 +247,7 @@ def game_loop():
 
 
 
-
-game_loop()
+menu_screen()
 quitgame()
 
 # This is copyright material by An2Ba prouductions. It belongs fully and only by An2Ba and them alone. Copying and/or duplicateing "Space Escape" violates this policy.
