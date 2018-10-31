@@ -7,8 +7,19 @@ from button import *
 textbox = pygame.image.load("Textbox.png")
 
 pygame.init()
+class level:
+	def __init__(self,x,y,music,speed,endx,num,textbox):
+		self.x = x
+		self.y = y
+		self.music = music
+		self.speed = speed
+		self.endx = endx
+		self.num = num
+		self.textbox = textbox
 
-
+levels = [level(0,0,"start_music.wav",10,-2400,1,textbox),
+level(-2400,0,"asteroidbelt.wav",1,-5250 + 800,2,textbox),
+level(-5250 + 800, 0,"gas_giants.wav",1,-9992 + 800,3,textbox)]
 
 display_width = 800
 display_height = 600
@@ -18,6 +29,8 @@ white = (255, 255, 255)
 red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
+
+
 
 bg = pygame.image.load('Background1.png')
 bg1 = pygame.image.load('Background2.png')
@@ -59,8 +72,6 @@ smy = 470
 
 def background(xa, ya):
 	gameDisplay.blit(bg, (xa,ya))
-
-
 
 def live_score(count):
 	font = pygame.font.SysFont(None, 25)
@@ -104,31 +115,56 @@ def destroy():
 
 	time.sleep(2)
 	menu_screen()
+def getLevelNumber():
+	with open("levelnumber.txt","r") as f:
+		return int(f.read())
+def setLevelNumber(num):
+	with open("levelnumber.txt","w") as f:
+		f.write(str(num))
 
-def menu_screen():
+def menu_screen(levelup = False):
 	pygame.mixer.init()
 	pygame.mixer.music.load("menu_music.wav")
 	pygame.mixer.music.play(loops=-1, start=0.0)
 	pygame.mixer.music.set_volume(0.5)
+	if (levelup):
+		setLevelNumber(getLevelNumber()+1)
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				quitgame()
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				if event.button == 1 and button.collidepoint(event.pos[0],event.pos[1]):
-					game_loop()
+					game_loop(levels[getLevelNumber()])
 
 		gameDisplay.blit(menu_background,(0,0))
 		pygame.draw.rect(gameDisplay,button.color,button.rect)
 		pygame.display.update()
 		clock.tick(30)
 
+def level_complete(level):
+	pygame.mixer.music.stop()
+	setLevelNumber(level.num + 1)
+	while True:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				quitgame()
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				if event.button == 1 and button.collidepoint(event.pos[0],event.pos[1]):
+					game_loop(levels[getLevelNumber()])
+
+		
+		background(level.endx,0)
+		gameDisplay.blit(level.textbox,(100,60))
+		pygame.draw.rect(gameDisplay,button.color,button.rect)
+		pygame.display.update()
+		clock.tick(30)
 
 
-def game_loop():
+def game_loop(level):
 	global current_asteroid, current_asteroid1
-	xa = 0
-	ya = 0
+	xa = level.x
+	ya = level.y
 
 	angle = 0
 	angle_add = 0
@@ -155,9 +191,10 @@ def game_loop():
 
 	gameExit = False
 
-	pygame.mixer.music.load("game_music.wav")
+	pygame.mixer.music.load(level.music)
 	pygame.mixer.music.play(loops=-1, start=0.0)
 	pygame.mixer.music.set_volume(0.5)
+
  
 	while not gameExit:
 
@@ -178,7 +215,7 @@ def game_loop():
 		y += y_change
 
 		background(xa, ya)
-		xa -= 1
+		xa -= level.speed
 
 		angle += angle_add
 		if angle >= 360:
@@ -234,7 +271,8 @@ def game_loop():
 			if obstacle_speed == 4:
 				angle_add = random.randrange(-1, 1)
 
-
+		if (xa <= level.endx):
+			level_complete(level)
 		if x + ship_width >= obstacle_startx and y + ship_height > obstacle_starty and y < obstacle_starty + obstacle_height and x < obstacle_startx + obstacle_width:
 			destroy()
 			restart()
