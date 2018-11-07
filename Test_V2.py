@@ -5,6 +5,9 @@ from button import *
 #Windows: søk CMD: Skriv 'D:': Skriv 'cd Andreas\Kode dingse boms': så kjør programmet ved å skrive 'Halla.py'
 
 textbox = pygame.image.load("Textbox.png")
+textbox1 = pygame.image.load("Textbox1.png")
+textbox2 = pygame.image.load("Textbox2.png")
+
 
 pygame.init()
 class level:
@@ -17,9 +20,9 @@ class level:
 		self.num = num
 		self.textbox = textbox
 
-levels = [level(0,0,"start_music.wav",10,-2400,1,textbox),
-level(-2400,0,"asteroidbelt.wav",1,-5250 + 800,2,textbox),
-level(-5250 + 800, 0,"gas_giants.wav",1,-9992 + 800,3,textbox)]
+levels = [level(0,0,"start_music.wav",10,-2400,0,textbox),
+level(-2400,0,"asteroidbelt.wav",0.765,-5250 + 800,1,textbox1),
+level(-5250 + 800, 0,"gas_giants.wav",1.3,-9992 + 800,2,textbox2)]
 
 display_width = 800
 display_height = 600
